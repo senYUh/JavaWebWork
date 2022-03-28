@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senyang.boot.mapper.MatterMapper">
+    <select id="getAllByType" resultType="com.senyang.boot.entity.Matter">
+        select * from matter where matter_type = #{type}
+        <if test="type != false">
+            and user_id = #{userId};
+        </if>
+    </select>
+    <insert id="insertMatter" useGeneratedKeys="true" keyProperty="matterId">
+        insert into matter(user_id,matter_type,matter_priority,matter_title,matter_state)
+        values (#{userId},#{matterType},#{matterPriority},#{matterTitle},#{matterState})
+    </insert>
+    <update id="updateMatter">
+        update matter set matter_title = #{matterTitle},matter_state = #{matterState},matter_priority = #{matterPriority}
+        where matter_id = #{matterId}
+        <if test="userId != 98761234">
+            and user_id = #{userId}
+        </if>
+    </update>
+    <delete id="deleteMatterById">
+        delete from matter where matter_id = #{matterId}
+        <if test="userId != -98761234">
+            and user_id = #{userId};
+        </if>
+    </delete>
+</mapper>

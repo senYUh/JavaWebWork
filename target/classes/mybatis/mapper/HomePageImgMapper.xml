@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senyang.boot.mapper.HomePageImgMapper">
+    <update id="updateImg">
+        update home_page_img set selected = #{selected} where home_page_img_id = #{homePageImgId}
+    </update>
+    <select id="isSelected" resultType="java.lang.Boolean">
+        select selected from home_page_img where img_url = #{imgUrl}
+    </select>
+    <select id="getImgToShow" resultType="com.senyang.boot.entity.HomePageImg">
+        select * from home_page_img where selected = 1 limit #{start},5
+    </select>
+    <select id="getImgByUrl" resultType="com.senyang.boot.entity.HomePageImg">
+        select * from home_page_img where img_url = #{url}
+    </select>
+    <insert id="insertImg" useGeneratedKeys="true" keyProperty="homePageImgId">
+        insert into home_page_img(img_url,selected) values (#{imgUrl},#{selected})
+    </insert>
+    <delete id="deleteImg">
+        delete from home_page_img where home_page_id = #{id}
+    </delete>
+</mapper>

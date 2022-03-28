@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senyang.boot.mapper.UserGameMapper">
+    <insert id="insertGame" useGeneratedKeys="true" keyProperty="gameId">
+        insert into user_game(game_img_url,game_name,game_state,game_url) values (#{gameImgUrl},#{gameName},#{gameState},#{gameUrl})
+    </insert>
+    <update id="updateGame">
+        update user_game set game_name = #{gameName},game_img_url = #{gameImgUrl},game_url = #{gameUrl},game_state = #{gameState}
+        where
+        game_id = #{gameId}
+    </update>
+    <delete id="deleteGame">
+        delete from user_game where game_id = #{gameId}
+    </delete>
+    <select id="getAllGameToUser" resultType="com.senyang.boot.entity.UserGame">
+        select * from user_game where game_state = 1
+    </select>
+    <select id="getAllGameToMan" resultType="com.senyang.boot.entity.UserGame">
+        select * from user_game
+    </select>
+</mapper>

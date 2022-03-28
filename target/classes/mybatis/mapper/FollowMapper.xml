@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senyang.boot.mapper.FollowMapper">
+    <select id="countFollowers" resultType="int">
+        select count(*) from user_follow where follow_user_id = #{userId}
+    </select>
+    <select id="countMyFollowed" resultType="int">
+        select count(*) from user_follow where user_id = #{userId}
+    </select>
+    <select id="getMyFollowed" resultType="com.senyang.boot.entity.Follow">
+        select user_id,follow_user_id from user_follow where user_id = #{userId}
+    </select>
+    <select id="isFollow" resultType="int">
+        select count(*) from user_follow where user_id = #{userId} and follow_user_id = #{followUserId}
+    </select>
+    <select id="getFollowersToLog" resultType="com.senyang.boot.entity.UserLogTemp">
+        select
+        user.user_name,user.user_id,
+        user.user_address,user.user_sex,user.user_birth,user.user_img_url,
+        (select
+        count(*)
+        from user_follow follow
+        where follow.follow_user_id = user.user_id)
+        	as fans_num,
+	        (select
+        	 count(*)
+        	 from user_follow follow
+        	 where follow.user_id = user.user_id)
+        	 as followed_num,
+        	 (select
+        	 count(*)
+        	 from user_dynamic dynamic
+        	 where dynamic.user_id = user.user_id)
+        	 as user_dynamic_num
+        from
+        user_base_info user
+        where
+        user_id in
+        (select user_id from user_follow where follow_user_id = #{userId})
+        order by fans_num desc limit #{pageNum},9
+    </select>
+    <select id="getFollowedUserLog" resultType="com.senyang.boot.entity.UserLogTemp">
+        select
+        user.user_name,user.user_id,
+        user.user_address,user.user_sex,user.user_birth,user.user_img_url,
+        (select
+        count(*)
+        from user_follow follow
+        where follow.follow_user_id = user.user_id)
+        	as fans_num,
+	        (select
+        	 count(*)
+        	 from user_follow follow
+        	 where follow.user_id = user.user_id)
+        	 as followed_num,
+        	 (select
+        	 count(*)
+        	 from user_dynamic dynamic
+        	 where dynamic.user_id = user.user_id)
+        	 as user_dynamic_num
+        from
+        user_base_info user
+        where
+        user_id in
+        (select follow_user_id from user_follow where user_id = #{userId})
+        order by fans_num desc limit #{pageNum},9
+    </select>
+    <insert id="followUser">
+        insert into user_follow values (#{userId},#{followUserId})
+    </insert>
+    <delete id="unFollow">
+        delete from user_follow where user_id = #{userId} and follow_user_id = #{followUserId}
+    </delete>
+</mapper>

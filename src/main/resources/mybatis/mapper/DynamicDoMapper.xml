@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senyang.boot.mapper.DynamicDoMapper">
+    <select id="getDynamicDoInfoById" resultType="com.senyang.boot.entity.DynamicDo">
+    select user_id,dynamic_id,thumbs_up,collection from dynamic_do where user_id = #{userId} and dynamic_id = #{dynamicId}
+    </select>
+    <select id="judge" resultType="int">
+        select count(*) from dynamic_do where user_id = #{userId} and dynamic_id = #{dynamicId}
+    </select>
+    <insert id="insertDynamicDoMes">
+    insert into dynamic_do(user_id,dynamic_id,thumbs_up,collection) values (#{userId},#{dynamicId},#{thumbsUp},#{collection})
+    </insert>
+    <update id="updateDynamicDoMes">
+    update dynamic_do set thumbs_up = #{thumbsUp},collection = #{collection} where user_id = #{userId} and dynamic_id = #{dynamicId}
+    </update>
+    <delete id="deleteDynamicDoMes">
+    delete from dynamic_do where user_id = #{userId} and dynamic_id = #{dynamicId}
+    </delete>
+    <delete id="deleteByDynamicId">
+        delete from dynamic_do where dynamic_id = #{dynamicId}
+    </delete>
+</mapper>

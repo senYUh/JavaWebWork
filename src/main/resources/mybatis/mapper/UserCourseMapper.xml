@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senyang.boot.mapper.UserCourseMapper">
+    <select id="getAllCourseByUserId" resultType="com.senyang.boot.entity.UserCourse">
+        select * from user_course where user_id = #{userId}
+    </select>
+    <select id="getOne" resultType="com.senyang.boot.entity.UserCourse">
+        select * from user_course
+        where
+        user_id = #{userId} and course_in_week = #{courseInWeek} and course_in_day = #{courseInDay}
+    </select>
+    <insert id="addCourse">
+        insert into user_course values (#{userId},#{courseName},#{courseInWeek},#{courseInDay})
+    </insert>
+    <delete id="deleteCourse">
+        delete from user_course where user_id = #{userId} and course_name = #{courseName}
+    </delete>
+    <delete id="deleteOne">
+        delete from  user_course where user_id = #{userId} and course_name = #{courseName}
+        and course_in_day = #{courseInDay} and course_in_week = #{courseInWeek}
+    </delete>
+</mapper>

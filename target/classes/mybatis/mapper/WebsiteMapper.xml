@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senyang.boot.mapper.WebsiteMapper">
+    <select id="getAllWebsiteCategory" resultType="com.senyang.boot.entity.WebsiteCategory">
+        select * from website_category
+    </select>
+    <select id="getWebsiteByType" resultType="com.senyang.boot.entity.WebsiteShow">
+        select * from website where website_type = #{websiteType}
+    </select>
+    <select id="getAllWebsite" resultType="com.senyang.boot.entity.WebsiteShow">
+        select * from website
+    </select>
+    <insert id="insertCategory" useGeneratedKeys="true" keyProperty="categoryId">
+        insert into website_category(category_name,category_type) values (#{categoryName},#{categoryType})
+    </insert>
+    <insert id="insertWebsite" useGeneratedKeys="true" keyProperty="websiteId">
+        insert into website(website_name,website_url,website_type) values (#{websiteName},#{websiteUrl},#{websiteType})
+    </insert>
+    <delete id="deleteCategory">
+        delete from website_category where category_id = #{categoryId}
+    </delete>
+    <delete id="deleteWebsite">
+        delete from website where website_id = #{websiteId}
+    </delete>
+    <delete id="deleteAllByType">
+        delete from website where website_type = #{websiteType}
+    </delete>
+    <update id="updateWeb">
+        update website set website_name = #{websiteName},website_url = #{websiteUrl} where website_id = #{websiteId}
+    </update>
+</mapper>

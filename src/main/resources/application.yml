@@ -1,0 +1,54 @@
+# 配置静态资源访问路径,为拦截器拦截更方便做处理
+#但是这样处理前缀会将index等欢迎页面都拦截，导致系统不能默认访问index这些页面
+#实际上会影响所有访问静态资源的请求，包括网站图标
+spring:
+  #  mvc:
+  #    static-path-pattern: /resource/**
+  #  web:
+  #    resources:
+  #      static-locations: classpath:/static/      #这个是配置指定文件夹作为静态资源文件夹
+  #      cache:
+  #        period: 180000 #表示缓存时间，在浏览器里面存的缓存的时间
+  #    add-mappings: false 这个操作可以禁用所有静态资源规则，这样无论静态资源咋放都访问不了
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+    contentnegotiation:
+      favor-parameter: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 1000MB
+  session:
+    timeout: 30m
+  jdbc:
+    template:
+      query-timeout: 3
+  datasource:
+    url: jdbc:mysql://localhost:3306/javawebwork
+    username: root
+    password: 13579qweASD@liu
+    druid:
+      filters: stat,wall
+      stat-view-servlet:
+        enabled: true
+        login-username: admin
+        login-password: 13579246810yslq
+        reset-enable: false
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js,*.jpg,*.png,*.gif,*.css,*.ico,/druid/*"
+      aop-patterns: com.senyang.boot.controller.*,com.senyang.boot.mapper.*,com.senyang.boot.service.*
+      filter:
+        stat:
+          slow-sql-millis: 1000
+          enabled: true
+        wall:
+          enabled: true
+mybatis-plus:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

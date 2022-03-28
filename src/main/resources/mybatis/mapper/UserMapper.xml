@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senyang.boot.mapper.UserMapper">
+    <select id="login" resultType="com.senyang.boot.entity.User">
+        select * from user_base_info where user_name = #{userName} and user_pwd = #{userPwd}
+    </select>
+    <select id="getByName" resultType="com.senyang.boot.entity.User">
+        select * from user_base_info where user_name = #{userName}
+    </select>
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="userId">
+        insert into user_base_info(user_name,user_pwd,user_img_url) values (#{userName},#{userPwd},#{userImgUrl})
+    </insert>
+    <insert id="insertUserWithoutImg" useGeneratedKeys="true" keyProperty="userId">
+        insert into user_base_info(user_name,user_pwd) values (#{userName},#{userPwd})
+    </insert>
+    <update id="updateUserByM">
+        update user_base_info set user_name = #{userName},user_address = #{userAddress},user_sex = #{userSex},
+        user_pwd = #{userPwd},user_birth = #{userBirth},user_img_url = #{userImgUrl} where user_id = #{userId}
+    </update>
+    <update id="updateUserImgUrl">
+        update user_base_info set user_img_url = #{url} where user_id = #{userId}
+    </update>
+</mapper>

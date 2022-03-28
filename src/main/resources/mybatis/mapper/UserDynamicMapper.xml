@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senyang.boot.mapper.UserDynamicMapper">
+    <select id="getUserAllDynamicById" resultType="com.senyang.boot.entity.ShowDynamic">
+        select dynamic.*,user.user_name,user.user_img_url
+        from user_dynamic dynamic,user_base_info user
+        where dynamic.user_id = user.user_id and user.user_id = #{userId}
+        order by dynamic_release_date desc
+        limit #{pageNum},5
+    </select>
+    <select id="getDynamicToShow" resultType="com.senyang.boot.entity.ShowDynamic">
+        select dynamic.*,user.user_name,user.user_img_url
+        from user_dynamic dynamic,user_base_info user
+        where dynamic.user_id = user.user_id and dynamic.dynamic_id = #{dynamicId}
+    </select>
+    <select id="getAllByList" resultType="com.senyang.boot.entity.ShowDynamic">
+    select dynamic.*,user.user_name,user.user_img_url
+        from user_dynamic dynamic,user_base_info user
+        where dynamic.user_id = user.user_id order by dynamic_release_date desc limit #{pageNum},5;
+    </select>
+    <select id="getDynamicByThumb" resultType="com.senyang.boot.entity.ShowDynamic">
+        select dynamic.*,user.user_name,user.user_img_url
+        from user_dynamic dynamic,user_base_info user
+        where dynamic.user_id = user.user_id
+        order by dynamic_thumb_nums desc
+        limit #{pageNum},5
+    </select>
+    <select id="getMyFollowedDynamic" resultType="com.senyang.boot.entity.ShowDynamic">
+    select dynamic.*,user.user_name,user.user_img_url
+        from user_dynamic dynamic,user_base_info user
+        where
+         dynamic.user_id = user.user_id
+         and
+         user.user_id in
+        <foreach collection="list" item="follow" open="(" close=")" separator=",">
+            #{follow.followUserId}
+        </foreach>
+        order by dynamic_release_date desc limit #{pageNum},5
+    </select>
+    <select id="getMyCollectedDynamic" resultType="com.senyang.boot.entity.ShowDynamic">
+        select dynamic.*,user.user_name,user.user_img_url
+        from user_dynamic dynamic,user_base_info user
+        where
+        (dynamic.user_id = user.user_id) and dynamic.dynamic_id
+        in
+        (select dynamic_id from dynamic_do where user_id = #{userId} and collection = 1)
+        order by dynamic_release_date desc limit #{pageNum},5
+    </select>
+    <select id="countDynamicById" resultType="int">
+        select count(*) from user_dynamic
+        <where>
+            <if test="userId == -1945003">
+                1=1
+            </if>
+            <if test="userId != -1945003">
+                and user_id = #{userId}
+            </if>
+        </where>
+    </select>
+    <select id="countMyFollowedDyNum" resultType="int">
+        select count(*) from user_dynamic
+        where
+         user_id in
+        <foreach collection="list" item="follow" open="(" close=")" separator=",">
+            #{follow.followUserId}
+        </foreach>
+    </select>
+    <select id="countMyCollectedDynamic" resultType="int">
+        select count(*) from user_dynamic
+        where
+        dynamic_id
+        in
+        (select dynamic_id from dynamic_do where user_id = #{userId} and collection = 1)
+    </select>
+    <insert id="uploadDynamic" useGeneratedKeys="true" keyProperty="dynamicId">
+        insert into user_dynamic(user_id,dynamic_title,dynamic_text,dynamic_release_date)
+         values (#{userId},#{dynamicTitle},#{dynamicText},#{dynamicReleaseDate})
+    </insert>
+    <update id="updateDynamic">
+        update user_dynamic set dynamic_text = #{dynamicText} where user_Id=#{userId} and dynamic_id =#{dynamicId}
+    </update>
+    <delete id="deleteDynamic">
+        delete from user_dynamic where dynamic_id =#{dynamicId}
+    </delete>
+    <update id="thumbDynamic">
+        update user_dynamic set dynamic_thumb_nums = dynamic_thumb_nums+1 where dynamic_id = #{dynamicId}
+    </update>
+    <update id="collectionDynamic">
+        update user_dynamic set dynamic_collection_nums = dynamic_collection_nums+1 where dynamic_id = #{dynamicId}
+    </update>
+    <update id="unThumbDynamic">
+        update user_dynamic set dynamic_thumb_nums = dynamic_thumb_nums-1 where dynamic_id = #{dynamicId}
+    </update>
+    <update id="unCollectionDynamic">
+        update user_dynamic set dynamic_collection_nums = dynamic_collection_nums-1 where dynamic_id = #{dynamicId}
+    </update>
+</mapper>
